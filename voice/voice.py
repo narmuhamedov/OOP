@@ -1,10 +1,15 @@
 import pyttsx3
 import speech_recognition as sr
 import pyaudio
+
 print("PyAudio успешно установлен!")
 import os
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:"
 from datetime import datetime
+
+with open('song.txt', 'r', encoding='UTF-8') as song:
+    song_read = song.read()
 
 
 
@@ -17,11 +22,9 @@ class ChatBot:
             'как тебя зовут': 'Меня зовут ККС Бот молиывлмоиывьмжыфвьдадлывожфипвлжофиамлдифлдомвиылдфивлдмо',
             'на каком курсе ты учишься': "В данный момент я не могу учиться так как я Бот",
             'твое любимое блюдо': 'Шаурма',
+            'песня': song_read,
         }
         self.recognizer = sr.Recognizer()
-
-
-
 
     def speak(self, text):
         self.engine.say(text)
