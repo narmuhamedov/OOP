@@ -42,6 +42,40 @@ async def start_command(message: Message):
     await message.reply("Привет! Я твой новый Telegram бот Иван")
 
 
+@router.message(Command("register"))
+async def register_user(message: Message):
+    args = message.text.split()
+    if len(args) != 3:
+        await message.reply("Использование команды /register <Имя> <Возраст>")
+        return
+
+    name, age = args[1], args[2]
+    if not age.isdigit():
+        await message.reply("Возраст должен быть числом.")
+        return
+
+    user_id = message.from_user.id
+    user_data[user_id] = {"name": name, "age": int(age)}
+
+    await message.reply(f"Регистрация прошла успешно! Твои данные: \nИмя: {name}\nВозраст: {age}")
+
+@router.message(Command("profile"))
+async def user_profile(message: Message):
+    user_id = message.from_user.id
+
+    # Проверяем, есть ли пользователь в словаре
+    if user_id not in user_data or not user_data[user_id].get("name"):
+        await message.reply("Вы не зарегистрированы.")
+        return
+
+    # Данные пользователя
+    user_info = user_data[user_id]
+    await message.reply(f"Ваш профиль:\nИмя: {user_info['name']}\nВозраст: {user_info['age']}")
+
+
+
+
+
 @router.message(Command("quiz"))
 async def start_quiz(message: Message):
     user_id = message.from_user.id
